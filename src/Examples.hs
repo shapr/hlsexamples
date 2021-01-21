@@ -15,7 +15,7 @@ biggest items = foldr1 max items
 
 -- | Triple a list
 -- >>> triple "a"
-triple l = l ++ l
+triple l = l ++ l ++ l
 
 -- moving cursor to the line above should show a lens
 -- add signature: triple :: [a] -> [a]
