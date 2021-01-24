@@ -28,3 +28,43 @@ data Foo a = Foo a
 
 doExamples :: [Char]
 doExamples = "Examples"
+
+-- tactics plugin demo
+
+-- uncomment the two lines below, click on the underscore. click on "Introduce lambda"
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe = _
+
+-- uncomment the lines, click on the type hole, then "Case split on ma"
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe = (\ ma famb -> _)
+
+-- this time, click on the first type hole, "attempt to fill hole"
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe = (\ma famb ->  (case ma of
+--    Nothing -> _
+--    (Just a) -> _))
+
+-- now click on the type hole
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe = (\ma famb ->  (case ma of
+--    Nothing -> Nothing
+--    (Just a) -> _))
+
+-- now replace the type hole with "famb _"
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe = (\ma famb ->  (case ma of
+--    Nothing -> Nothing
+--    (Just a) -> _))
+
+-- attempt to fill hole, and the function is done!
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe = (\ma famb ->  (case ma of
+--    Nothing -> Nothing
+--    (Just a) -> (famb _)))
+
+-- this is the final form!
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe = (\ma famb ->  (case ma of
+--    Nothing -> Nothing
+--    (Just a) -> (famb a)))
