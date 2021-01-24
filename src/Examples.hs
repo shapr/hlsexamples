@@ -1,5 +1,9 @@
 module Examples where
 
+-- Note: The different options here are exposed as "code actions" and "code lenses" via the language server protocol.
+-- If you have trouble applying some of these examples make sure your editor is configured to use both functionalities
+-- and make yourself familiar with how to use them. (e.g. keybindings).
+
 import Data.List
 
 -- moving cursor to line above should show three lens choices
@@ -63,7 +67,7 @@ doExamples = "Examples"
 --    Nothing -> Nothing
 --    (Just a) -> (famb _)))
 
--- this is the final form!
+-- this is the final form! (though you could "Apply all hints" to get rid of too many parentheses!)
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
 -- applyMaybe = (\ma famb ->  (case ma of
 --    Nothing -> Nothing
