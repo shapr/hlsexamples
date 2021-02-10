@@ -5,6 +5,7 @@ module Examples where
 -- and make yourself familiar with how to use them. (e.g. keybindings).
 
 import Data.List
+import Test.QuickCheck
 
 -- moving cursor to line above should show three lens choices
 -- Remove import
@@ -24,7 +25,7 @@ triple l = l ++ l ++ l
 -- moving cursor to the line above should show a lens
 -- add signature: triple :: [a] -> [a]
 
-data Foo a = Foo a
+data Foo a = Foo a | Bar
 
 -- uncomment the instance line below, move cursor to the end, should see hls-class-plugin code lens:
 -- "Add placeholders for 'pure', '<*>' "
@@ -72,3 +73,17 @@ doExamples = "Examples"
 -- applyMaybe = (\ma famb ->  (case ma of
 --    Nothing -> Nothing
 --    (Just a) -> (famb a)))
+
+-- tactics can generate an Arbitrary instance for you
+-- uncomment the two lines below, select the type hole, then "Attempt to fill hole" the hole fill is show below
+-- instance (Arbitrary a) => Arbitrary (Foo a) where
+--   arbitrary = _
+
+-- instance (Arbitrary a) => Arbitrary (Foo a) where
+--   arbitrary = (let terminal = [Foo <$> arbitrary, pure Bar]
+--                in
+--                  sized
+--                    $ (\ n
+--                         -> case n <= 1 of
+--                              True -> oneof terminal
+--                              False -> oneof $ ([] <> terminal)))
