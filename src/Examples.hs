@@ -25,8 +25,6 @@ triple l = l ++ l ++ l
 -- moving cursor to the line above should show a lens
 -- add signature: triple :: [a] -> [a]
 
-data Foo a = Foo a | Bar
-
 -- uncomment the instance line below, move cursor to the end, should see hls-class-plugin code lens:
 -- "Add placeholders for 'pure', '<*>' "
 -- instance Applicative Foo
@@ -73,6 +71,8 @@ doExamples = "Examples"
 -- applyMaybe = (\ma famb ->  (case ma of
 --    Nothing -> Nothing
 --    (Just a) -> (famb a)))
+
+data Foo a = Foo a | Bar
 
 -- tactics can generate an Arbitrary instance for you
 -- uncomment the two lines below, select the type hole, then "Attempt to fill hole" the hole fill is show below
