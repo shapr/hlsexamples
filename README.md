@@ -25,6 +25,6 @@ Many fun things on the [lsp-mode](https://emacs-lsp.github.io/lsp-mode/) website
 
 How does all this cool stuff go?
 
-It's the [haskell-language-server](https://github.com/haskell/haskell-language-server/) ! You too can write an amazing plugin to do whatever cool things come to mind. Check out the [existing plugins]
+It's the [haskell-language-server](https://github.com/haskell/haskell-language-server/) ! You too can write an amazing plugin to do whatever cool things come to mind. Check out the [existing plugins](https://github.com/haskell/haskell-language-server/tree/master/plugins)
 
 The case splitting magic is from [wingman](https://haskellwingman.dev/). Wingman wraps the program synthesis library [refinery](https://github.com/TOTBWF/refinery/).
