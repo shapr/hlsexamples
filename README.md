@@ -9,11 +9,13 @@ Install [ghcup](https://www.haskell.org/ghcup/), then use ghcup to install ghc 8
 If you want to use nix, a quick way is: `nix-shell -p cookiecutter git --run 'cookiecutter gh:utdemir/hs-nix-template'` and then change directory into your generated project and `niv update nixpkgs -b nixpkgs-unstable` .
 Then you'll have the latest ghc and haskell-language-server in scope.
 
-# emacs basics
-Many fun things on the [lsp-mode](https://emacs-lsp.github.io/lsp-mode/) website.
-
 # talk contents
 All the cool things in the [haskell language server features list](https://haskell-language-server.readthedocs.io/en/latest/features.html).
+
+You probably want to look at the [Examples](src/Examples.hs) file.
+
+# emacs basics
+Many fun things on the [lsp-mode](https://emacs-lsp.github.io/lsp-mode/) website.
 
 # attractive plumage to convince you to try this
 
