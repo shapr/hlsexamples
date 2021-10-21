@@ -4,19 +4,18 @@ module Examples where
 -- If you have trouble applying some of these examples make sure your editor is configured to use both functionalities
 -- and make yourself familiar with how to use them. (e.g. keybindings).
 
-import Data.List
+-- move cursor to the next line, should see 'Remove all redundant imports' , 'Remove import' , 'Make all imports explicit'
+import Data.Char
+import Data.Text (Text)
 import Test.QuickCheck
 
--- moving cursor to line above should show three lens choices
--- Remove import
--- Remove redundant imports
--- Make all imports explicit
-
--- these next lines fire two hlint hints, "eta reduce" and "use maximum"
+-- the line below should show 'Generate signature comments' so you can easily write haddocks
 biggest :: (Foldable t, Ord a) => t a -> a
 biggest items = foldr1 max items
 
--- code evaluation code lens: as long as lens mode is on, you'll see "Evaluate..." above the >>> line
+-- the line above will show two hlint hints, "eta reduce" and "use maximum"
+
+-- code evaluation code lens: as long as lens mode is on, you'll see "Evaluate..." on the >>> line below
 
 -- | Triple a list
 -- >>> triple "a"
@@ -25,52 +24,47 @@ triple l = l ++ l ++ l
 -- moving cursor to the line above should show a lens
 -- add signature: triple :: [a] -> [a]
 
--- uncomment the instance line below, move cursor to the end, should see hls-class-plugin code lens:
--- "Add placeholders for 'pure', '<*>' "
+-- uncomment the instance line below, move cursor to the end, should see hls-class-plugin actions:
+-- "Add placeholders for 'pure', '<*>' " and "Add `Functor Foo` to the context of this instance declaration"
 -- instance Applicative Foo
 
 doExamples :: [Char]
 doExamples = "Examples"
 
--- tactics plugin demo
+-- call hierarchy
+-- fold / unfold
+thisthing = biggest $ triple doExamples
 
--- uncomment the two lines below, click on the underscore. click on "Introduce lambda"
+-- add missing imports
+-- otherthing = groupBy
+
+-- add missing pragmas
+-- foo :: Text
+-- foo = "foo"
+
+-- wingman / tactics plugin demo
+
+-- uncomment the two lines below, click on the underscore. click on "Attempt to fill hole"
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
 -- applyMaybe = _
 
--- uncomment the lines, click on the type hole, then "Case split on ma"
+-- but wait, let's do it step by step!
+-- uncomment the lines, click on the type hole, then "Introduce lambda"
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
--- applyMaybe = (\ ma famb -> _)
+-- applyMaybe = _
 
--- this time, click on the first type hole, "attempt to fill hole"
+-- now uncomment and "Case split on m_a"
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
--- applyMaybe = (\ma famb ->  (case ma of
---    Nothing -> _
---    (Just a) -> _))
+-- applyMaybe m_a f = _wr
 
--- now click on the type hole
+-- uncomment and fill the two holes _ws and _wt
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
--- applyMaybe = (\ma famb ->  (case ma of
---    Nothing -> Nothing
---    (Just a) -> _))
+-- applyMaybe Nothing f = _ws
+-- applyMaybe (Just a) f = _wt
 
--- now replace the type hole with "famb _"
+-- steps that will NOT work: uncomment and "Homomorphic case split on m_a" - extra credit, why doesn't that work?
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
--- applyMaybe = (\ma famb ->  (case ma of
---    Nothing -> Nothing
---    (Just a) -> _))
-
--- attempt to fill hole, and the function is done!
--- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
--- applyMaybe = (\ma famb ->  (case ma of
---    Nothing -> Nothing
---    (Just a) -> (famb _)))
-
--- this is the final form! (though you could "Apply all hints" to get rid of too many parentheses!)
--- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
--- applyMaybe = (\ma famb ->  (case ma of
---    Nothing -> Nothing
---    (Just a) -> (famb a)))
+-- applyMaybe m_a f = _wr
 
 data Foo a = Foo a | Bar
 
@@ -79,11 +73,37 @@ data Foo a = Foo a | Bar
 -- instance (Arbitrary a) => Arbitrary (Foo a) where
 --   arbitrary = _
 
+-- this is the result!
 -- instance (Arbitrary a) => Arbitrary (Foo a) where
---   arbitrary = (let terminal = [Foo <$> arbitrary, pure Bar]
---                in
---                  sized
---                    $ (\ n
---                         -> case n <= 1 of
---                              True -> oneof terminal
---                              False -> oneof $ ([] <> terminal)))
+--   arbitrary
+--     = let terminal = [Foo <$> arbitrary, pure Bar]
+--       in
+--         sized
+--           $ (\ n
+--                -> case n <= 1 of
+--                     True -> oneof terminal
+--                     False -> oneof $ ([] <> terminal))
+
+data Baz s a = Baz s a (s -> a) | Quux [(Int, a)]
+
+-- instance Functor (Baz s) where
+--   fmap = _
+
+-- replace the underscore with a custom tactic: [wingman| intros |]
+-- running that custom tactic will get you this next line
+--  fmap f x = _wV
+
+-- instance Functor (Baz s) where
+--   fmap = [wingman| intros f x, destruct x, ctor Baz, assumption, application, assumption |]
+
+-- instance Functor (Baz s) where
+--  fmap = [wingman| intros f x, homo x |]
+
+-- comma means "run a tactic at the next hole that exists", semicolon means "run a tactic at every hole that exists"
+
+-- instance Functor (Baz s) where
+--   fmap f (Baz s a fsa) = _wa
+--   fmap f (Quux x1) = _wb
+
+-- instance (Arbitrary a, Arbitrary s) => Arbitrary (Baz s a) where
+--   arbitrary = _
