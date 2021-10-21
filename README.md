@@ -18,3 +18,11 @@ All the cool things in the [haskell language server features list](https://haske
 # attractive plumage to convince you to try this
 
 ![emacs-hls](emacs-hls.svg)
+
+# citations
+
+How does all this cool stuff go?
+
+It's the [haskell-language-server](https://github.com/haskell/haskell-language-server/) ! You too can write an amazing plugin to do whatever cool things come to mind. Check out the [existing plugins]
+
+The case splitting magic is from [wingman](https://haskellwingman.dev/). Wingman wraps the program synthesis library [refinery](https://github.com/TOTBWF/refinery/).

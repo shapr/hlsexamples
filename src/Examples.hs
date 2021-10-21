@@ -24,10 +24,6 @@ triple l = l ++ l ++ l
 -- moving cursor to the line above should show a lens
 -- add signature: triple :: [a] -> [a]
 
--- uncomment the instance line below, move cursor to the end, should see hls-class-plugin actions:
--- "Add placeholders for 'pure', '<*>' " and "Add `Functor Foo` to the context of this instance declaration"
--- instance Applicative Foo
-
 doExamples :: [Char]
 doExamples = "Examples"
 
@@ -48,6 +44,11 @@ thisthing = biggest $ triple doExamples
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
 -- applyMaybe = _
 
+-- this is the result!
+-- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+-- applyMaybe Nothing _ = Nothing
+-- applyMaybe (Just a) f = f a
+
 -- but wait, let's do it step by step!
 -- uncomment the lines, click on the type hole, then "Introduce lambda"
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
@@ -65,6 +66,19 @@ thisthing = biggest $ triple doExamples
 -- steps that will NOT work: uncomment and "Homomorphic case split on m_a" - extra credit, why doesn't that work?
 -- applyMaybe :: Maybe a -> (a -> Maybe b) -> Maybe b
 -- applyMaybe m_a f = _wr
+
+data ADT = One Int | Two String | Three | Four Bool ADT
+
+-- Want to see a cool case split? uncomment and choose "Introduce and destruct term"
+-- awesome :: ADT -> Int
+-- awesome = _
+
+-- this is the result
+-- awesome :: ADT -> Int
+-- awesome (One n) = _wz
+-- awesome (Two s) = _wA
+-- awesome Three = _wB
+-- awesome (Four b adt') = _wC
 
 data Foo a = Foo a | Bar
 
@@ -84,6 +98,7 @@ data Foo a = Foo a | Bar
 --                     True -> oneof terminal
 --                     False -> oneof $ ([] <> terminal))
 
+-- if there's plenty of time left over, we talk about custom wingman tactics
 data Baz s a = Baz s a (s -> a) | Quux [(Int, a)]
 
 -- instance Functor (Baz s) where
@@ -107,3 +122,8 @@ data Baz s a = Baz s a (s -> a) | Quux [(Int, a)]
 
 -- instance (Arbitrary a, Arbitrary s) => Arbitrary (Baz s a) where
 --   arbitrary = _
+
+-- this doesn't work right for reasons unknown?
+-- uncomment the instance line below, move cursor to the end, should see hls-class-plugin actions:
+-- "Add placeholders for 'pure', '<*>' " and "Add `Functor Foo` to the context of this instance declaration"
+-- instance Applicative Foo
