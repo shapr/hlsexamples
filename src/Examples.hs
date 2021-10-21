@@ -6,11 +6,10 @@ module Examples where
 
 -- move cursor to the next line, should see 'Remove all redundant imports' , 'Remove import' , 'Make all imports explicit'
 import Data.Char
-import Data.Text (Text)
+import Data.Text (Text, unpack)
 import Test.QuickCheck
 
--- the line below should show 'Generate signature comments' so you can easily write haddocks
-biggest :: (Foldable t, Ord a) => t a -> a
+-- the line below should show 'add signature' once you click that, 'Generate signature comments' will fill in empty haddock comments
 biggest items = foldr1 max items
 
 -- the line above will show two hlint hints, "eta reduce" and "use maximum"
@@ -21,22 +20,15 @@ biggest items = foldr1 max items
 -- >>> triple "a"
 triple l = l ++ l ++ l
 
--- moving cursor to the line above should show a lens
--- add signature: triple :: [a] -> [a]
-
-doExamples :: [Char]
-doExamples = "Examples"
-
 -- call hierarchy
 -- fold / unfold
 thisthing = biggest $ triple doExamples
 
+doExamples :: [Char]
+doExamples = "Examples"
+
 -- add missing imports
 -- otherthing = groupBy
-
--- add missing pragmas
--- foo :: Text
--- foo = "foo"
 
 -- wingman / tactics plugin demo
 
@@ -79,6 +71,7 @@ data ADT = One Int | Two String | Three | Four Bool ADT
 -- awesome (Two s) = _wA
 -- awesome Three = _wB
 -- awesome (Four b adt') = _wC
+-- for bonus fun, do a case split on the string in Two
 
 data Foo a = Foo a | Bar
 
@@ -97,6 +90,15 @@ data Foo a = Foo a | Bar
 --                -> case n <= 1 of
 --                     True -> oneof terminal
 --                     False -> oneof $ ([] <> terminal))
+
+-- attempt to fill hole
+-- instance Functor Foo where
+--   fmap = _
+
+-- as usual, attempt to fill hole
+-- instance Applicative Foo where
+--   pure = _
+--   liftA2 = _
 
 -- if there's plenty of time left over, we talk about custom wingman tactics
 data Baz s a = Baz s a (s -> a) | Quux [(Int, a)]
@@ -123,7 +125,14 @@ data Baz s a = Baz s a (s -> a) | Quux [(Int, a)]
 -- instance (Arbitrary a, Arbitrary s) => Arbitrary (Baz s a) where
 --   arbitrary = _
 
--- this doesn't work right for reasons unknown?
+-- things below don't work for reasons unknown
+
 -- uncomment the instance line below, move cursor to the end, should see hls-class-plugin actions:
 -- "Add placeholders for 'pure', '<*>' " and "Add `Functor Foo` to the context of this instance declaration"
 -- instance Applicative Foo
+
+-- add missing pragmas
+-- foo :: String
+-- foo = show (unpack "foo")
+
+-- bugs happen, make sure you know how to restart haskell-language-server from inside your editor
