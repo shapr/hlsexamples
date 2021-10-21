@@ -6,6 +6,7 @@ module Examples where
 
 -- move cursor to the next line, should see 'Remove all redundant imports' , 'Remove import' , 'Make all imports explicit'
 import Data.Char
+import Data.Monoid
 import Data.Text (Text, unpack)
 import Test.QuickCheck
 
@@ -75,7 +76,7 @@ data ADT = One Int | Two String | Three | Four Bool ADT
 
 data Foo a = Foo a | Bar
 
--- tactics can generate an Arbitrary instance for you
+-- wingman can generate an typeclass instances for you
 -- uncomment the two lines below, select the type hole, then "Attempt to fill hole" the hole fill is show below
 -- instance (Arbitrary a) => Arbitrary (Foo a) where
 --   arbitrary = _
@@ -104,7 +105,7 @@ data Foo a = Foo a | Bar
 data Baz s a = Baz s a (s -> a) | Quux [(Int, a)]
 
 -- instance Functor (Baz s) where
---   fmap = _
+--   fmap = [wingman| intros |]
 
 -- replace the underscore with a custom tactic: [wingman| intros |]
 -- running that custom tactic will get you this next line
@@ -114,16 +115,32 @@ data Baz s a = Baz s a (s -> a) | Quux [(Int, a)]
 --   fmap = [wingman| intros f x, destruct x, ctor Baz, assumption, application, assumption |]
 
 -- instance Functor (Baz s) where
---  fmap = [wingman| intros f x, homo x |]
+--  fmap = [wingman| intros f x
+--                  , homo x
+--                  ; assumption
+--                  | (with_arg, assumption, nested fmap)
+--                  , assume f |]
+-- in Sandy's video, the custom tactic above correctly produces the right Functor instance even when Baz changes greatly
 
 -- comma means "run a tactic at the next hole that exists", semicolon means "run a tactic at every hole that exists"
 
--- instance Functor (Baz s) where
---   fmap f (Baz s a fsa) = _wa
---   fmap f (Quux x1) = _wb
-
+-- "attempt to fill hole" does work here, with one extra step
 -- instance (Arbitrary a, Arbitrary s) => Arbitrary (Baz s a) where
 --   arbitrary = _
+
+data Zoop = Zoop (Sum Int) String Any
+  deriving (Eq, Ord, Show)
+
+-- 1. refine hole 2. split all function arguments 3. attempt to fill hole
+-- instance Semigroup Zoop where
+--   (Zoop sum s any) <> (Zoop sum' str any') =
+--     Zoop (sum <> sum') (s <> str) (any <> any')
+
+-- instance Semigroup Zoop where
+--     (<>) = [wingman| intros x1 x2 , destruct all , split ; pointwise (use (<>)) ; assumption |]
+
+-- instance Monoid Zoop where
+--   mempty = [wingman| split; use mempty |]
 
 -- things below don't work for reasons unknown
 
