@@ -1,6 +1,10 @@
 # hlsexamples
 This workshop lets you practice using the haskell-language-server on a file designed to showcase the features in the 1.4 release.
 
+# Ok, convince me? What's the big selling point?
+
+You get in-editor type errors. It's like ghcid or manually running a compile, but without the context switch, as you type.
+
 # How to get started
 Read the manual for [installation](https://haskell-language-server.readthedocs.io/en/latest/installation.html), or follow the instructions below.
 
@@ -20,6 +24,8 @@ Many fun things on the [lsp-mode](https://emacs-lsp.github.io/lsp-mode/) website
 # attractive plumage to convince you to try this
 
 ![emacs-hls](emacs-hls.svg)
+
+![emacs-type-popup](emacs-type-popup.svg)
 
 # citations
 
